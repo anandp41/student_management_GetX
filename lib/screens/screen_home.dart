@@ -1,0 +1,88 @@
+import 'package:get/get.dart';
+import 'package:sql/controller/home_controller.dart';
+import 'package:sql/screens/widgets/add_student.dart';
+import 'package:sql/screens/widgets/custom_search_delegate.dart';
+import 'package:sql/screens/widgets/list_student.dart';
+import 'package:flutter/material.dart';
+
+class ScreenHome extends StatelessWidget {
+  const ScreenHome({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // getAllStudents();
+
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.deepPurpleAccent,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        title: const Text(
+          'Admin',
+          style: TextStyle(color: Colors.white),
+        ),
+        actions: [
+          Row(
+            children: [
+              IconButton(
+                  onPressed: () {
+                    showSearch(
+                        context: context, delegate: CustomSearchDelegate());
+                  },
+                  icon: const Icon(
+                    Icons.search,
+                    color: Colors.black,
+                  )),
+              IconButton(
+                icon: GetBuilder<HomeController>(
+                    init: HomeController(),
+                    builder: (_) {
+                      return Icon(
+                        _.isListOn ? Icons.view_list : Icons.grid_view,
+                        color: Colors.black,
+                      );
+                    }),
+                onPressed: () {
+                  Get.find<HomeController>().toggleListView();
+                },
+              )
+            ],
+          ),
+        ],
+      ),
+      body: SafeArea(
+          child: Column(
+        children: [
+          Padding(
+            padding:
+                const EdgeInsets.only(top: 8.0, bottom: 8, left: 20, right: 20),
+            child: AddStudentWidget(),
+          ),
+          const Card(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(25))),
+            child: Divider(
+              color: Colors.lightBlueAccent,
+              thickness: 10,
+              height: 10,
+              indent: 30,
+              endIndent: 30,
+            ),
+          ),
+          const Expanded(
+              child: Padding(
+            padding: EdgeInsets.only(top: 8.0, bottom: 8, left: 20, right: 20),
+            child: Card(
+                color: Colors.white60,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(25))),
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: ListStudentWidget(),
+                )),
+          ))
+        ],
+      )),
+    );
+  }
+}
